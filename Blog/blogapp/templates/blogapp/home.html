@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Home
-</body>
-</html>
+{% extends 'blogapp/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Post</h1>
+    <ul>
+        {% for post in object_list %}
+            <li> <a href="{% url 'article' post.id %}">{{post.title}}</a>  - {{post.author.first_name}} {{post.author.last_name}}<br>
+            {{post.body|truncatewords:100}}...</li>
+        {% endfor %}
+    </ul>
+{% endblock %}    
