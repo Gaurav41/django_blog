@@ -1,7 +1,7 @@
 from django.db import models
 from django.shortcuts import render,HttpResponse
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post,Category
 from .forms import PostForm,EditForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -38,3 +38,15 @@ class DeletePostView(LoginRequiredMixin,DeleteView):
     model = Post
     template_name = 'blogapp/delete_post.html'
     success_url=reverse_lazy('home')
+
+class AddCategoryView(LoginRequiredMixin,CreateView):
+    model = Category
+    # form_class = PostForm
+    template_name = 'blogapp/add_category.html'
+    fields = '__all__'
+
+
+def CategoryView(request,cats):
+    cats = cats.replace('-',' ')
+    category_posts = Post.objects.filter(category=cats).order_by("-publish_date")
+    return render(request,'blogapp/categories.html',{'category':cats.title(),'category_posts':category_posts})

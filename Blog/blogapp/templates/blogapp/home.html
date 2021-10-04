@@ -4,7 +4,7 @@
     <h1>Post</h1>
     <ul>
         {% for post in object_list %}
-            <li> <a href="{% url 'article' post.id %}">{{post.title}}</a>  - {{post.author.first_name}} {{post.author.last_name}}<br>
+            <li> <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a href="{% url 'category' post.category|slugify %}">{{post.category}}</a> - {{post.author.first_name}} {{post.author.last_name}}<br>
             {{post.body|safe|truncatewords:80}}...</li>
         {% endfor %}
     </ul>
