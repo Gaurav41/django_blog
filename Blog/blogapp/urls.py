@@ -7,5 +7,6 @@ urlpatterns = [
     path('add_category/',views.AddCategoryView.as_view(),name="add_category" ),
     path('article/edit/<int:pk>',views.EditPostView.as_view(),name="edit_post" ),
     path('article/delete/<int:pk>',views.DeletePostView.as_view(),name="delete_post" ),
-    path('category/<str:cats>',views.CategoryView,name="category" ),
+    # path('category/<str:cats>',views.CategoryView,name="category" ),
+    path('category/<str:cats>',views.CategoryView.as_view(),name="category" ),
 ]

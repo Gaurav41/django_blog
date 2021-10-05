@@ -16,6 +16,11 @@ class HomeView(ListView):
     template_name = 'blogapp/home.html'
     # ordering = ['-id']
     ordering = ['-publish_date']
+    def get_context_data(self,*args, **kwargs):
+        context = super().get_context_data(*args,**kwargs)
+        context['categories']= Category.objects.all()
+        return context
+
 
 class ArticleView(DetailView):
     model = Post
@@ -46,7 +51,24 @@ class AddCategoryView(LoginRequiredMixin,CreateView):
     fields = '__all__'
 
 
-def CategoryView(request,cats):
-    cats = cats.replace('-',' ')
-    category_posts = Post.objects.filter(category=cats).order_by("-publish_date")
-    return render(request,'blogapp/categories.html',{'category':cats.title(),'category_posts':category_posts})
+# def CategoryView(request,cats):
+#     cats = cats.replace('-',' ')
+#     category_posts = Post.objects.filter(category=cats).order_by("-publish_date")
+#     return render(request,'blogapp/categories.html',{'category':cats.title(),'category_posts':category_posts})
+
+
+class CategoryView(ListView):
+    model = Post
+    template_name = 'blogapp/home.html'
+    # ordering = ['-id']
+    ordering = ['-publish_date']
+
+    def get_queryset(self,*args, **kwargs):
+        cats = self.kwargs['cats'].replace('-',' ')
+        category_posts = Post.objects.filter(category=cats).order_by("-publish_date")
+        return category_posts
+        
+    def get_context_data(self,*args, **kwargs):
+        context = super().get_context_data(*args,**kwargs)
+        context['categories']= Category.objects.all()
+        return context

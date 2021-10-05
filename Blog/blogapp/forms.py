@@ -5,12 +5,12 @@ from .models import Post,Category
 
 # choices = [('coding','coding'),('lifestyle','lifestyle'),('sport','sport'),('health','health'),]
 choices = Category.objects.all().values_list('name','name')
-print(choices)
+# print(choices)
 choices_list=[]
 
 for item in choices:
     choices_list.append(item)
-print(choices_list)
+# print(choices_list)
 
 
 
