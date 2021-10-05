@@ -13,15 +13,22 @@ for item in choices:
 # print(choices_list)
 
 
-
 class PostForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(PostForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['author'].required = False
+    
     class Meta:
         model = Post
         fields = ['title','author','category','body']
 
         widgets={
             'title' : forms.TextInput(attrs={'class':'form-control'}),
-            'author' : forms.Select(attrs={'class':'form-control'}),
+            # 'author' : forms.Select(attrs={'class':'form-control'}),
+            'author' : forms.HiddenInput(attrs={'class':'form-control','required': False}),
             # 'category':forms.Select(choices=choices,attrs={'class':'form-control'}),
             'category':forms.Select(choices=choices_list,attrs={'class':'form-control'}),
             'body' : forms.Textarea(attrs={'class':'form-control'}),
