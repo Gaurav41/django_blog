@@ -1,4 +1,5 @@
 {% extends 'blogapp/base.html' %}
+{% load socialaccount %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
@@ -25,6 +26,10 @@
         <div class="text-center" ><input  type="submit" class="btn btn-primary" value="Login"></div>
         
     </form>
+</div>
+
+<div class="alert alert-danger" role="alert">
+    <a href="{% provider_login_url 'google' %}" class="alert-link">Clike Here</a>Login with Google Accounts.
 </div>
 
 {% endblock %}

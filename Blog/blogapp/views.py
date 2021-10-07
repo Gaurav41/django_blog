@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import fields
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
-from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Post,Category,Comment
 from .forms import PostForm,EditForm,CommentForm
 from django.urls import reverse_lazy
@@ -30,12 +30,20 @@ class PostFilter(django_filters.FilterSet):
 class HomeView(ListView):
     model = Post
     template_name = 'blogapp/home.html'
-    # ordering = ['-id']
     ordering = ['-publish_date']
     # filter_backends = [DjangoFilterBackend]
     # filterset_fileds=['category']
     
     filterset_class = PostFilter
+    def get_template_names(self):
+        if self.request.user.is_superuser:
+            template_name = 'blogapp/admin_home.html'
+        else:
+            template_name = 'blogapp/home.html'
+
+        return template_name
+
+
 
     def get_queryset(self):
         keyword = self.request.GET.get('search','')
@@ -183,3 +191,6 @@ class MyPostView(ListView):
         context['object_list']= myFilter.qs  
         return context
         
+
+class SocialLoginTemplateView(TemplateView):
+    template_name="blogapp/social_login.html"

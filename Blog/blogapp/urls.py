@@ -2,6 +2,9 @@ from django.urls import path,include
 from . import views 
 urlpatterns = [
     path('',views.HomeView.as_view(),name="home" ),
+
+    path('accounts/',include('allauth.urls')),
+    
     path('article/<int:pk>',views.ArticleView.as_view(),name="article" ),
     path('article/<int:pk>/comment',views.AddCommentView.as_view(),name="add_comment" ),
     path('add_post/',views.AddPostView.as_view(),name="add_post" ),
