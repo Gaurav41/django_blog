@@ -1,8 +1,8 @@
 from django.db import models
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
-from .models import Post,Category
-from .forms import PostForm,EditForm
+from .models import Post,Category,Comment
+from .forms import PostForm,EditForm,CommentForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404,HttpResponseForbidden
@@ -97,3 +97,16 @@ class CategoryView(ListView):
         context = super().get_context_data(*args,**kwargs)
         context['categories']= Category.objects.all()
         return context
+
+# Add comment
+class AddCommentView(LoginRequiredMixin,CreateView):
+    model = Comment
+    form_class = CommentForm
+    # fields = '__all__'
+    template_name = 'blogapp/add_comment.html'
+    ordering = ['-date_added']
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        form.instance.user = self.request.user
+        return super().form_valid(form)
