@@ -1,0 +1,44 @@
+{% extends 'blogapp/base.html' %}
+{% block title %}My Posts{% endblock %}
+{% block content %}
+<h1 class="text-center mt-5">Post</h1>
+
+<div class="text-center mt-5 border border-primary p-4 ">
+    <form action="">
+        {{myFilter.form}}
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+
+<div class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-8"><h4>Posts</h4></div>
+        <div class="col-md-4"><h4>Action</h4></div>
+    </div>
+    <ol>
+        {% for post in object_list %}
+        <li>
+            <div class="row">
+                <div class="col-md-8">
+                    <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
+                        href="{% url 'category' post.category|slugify %}">{{post.category}}</a> -
+                    {{post.author.first_name}} {{post.author.last_name}}<br>
+                    <div class="text-justify">
+                        {{post.body|safe|truncatewords:30}}...
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <a href="{% url 'edit_post' post.pk %}">Update</a> | 
+                    <a href="{% url 'delete_post' post.pk %}">Delete</a>     
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+
+    </ol>
+</div>
+<div class="mt-5">
+
+</div>
+
+{% endblock %}

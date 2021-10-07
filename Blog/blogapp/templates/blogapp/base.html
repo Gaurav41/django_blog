@@ -20,11 +20,11 @@
         <a class="navbar-brand" href="#">My Blog App</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
             </li>
             {% if categories %}
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 Categories
@@ -39,36 +39,39 @@
 
 
             {% if user.is_authenticated %}
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link" href="{% url 'add_post' %}">Add Post</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link" href="{% url 'add_category' %}">Add Category</a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link" href="{% url 'edit_profile' %}">Edit Profile</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mx-1">
+              <a class="nav-link" href="{% url 'my_posts' %}">My Posts</a>
+            </li>
+            <li class="nav-item mx-1">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">Welcome {{user.username}} {{user.id}}</a>
+            <li class="nav-item mx-1">
+              <a class="nav-link" href="">Welcome {{user.username}}</a>
             </li>
             {%else%}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            <li class="nav-item mx-1">
+              <a class="nav-link " href="{% url 'register' %}">Register</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link" href="{% url 'login' %}">Login</a>
             </li>
             {% endif %} 
         </ul>
-          <form class="d-flex" method="GET" action="">
+          <!-- <form class="d-flex" method="GET" action="">
             
             <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+          </form> -->
         </div>
       </div>
     </nav>

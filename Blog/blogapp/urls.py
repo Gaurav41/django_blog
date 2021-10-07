@@ -11,5 +11,7 @@ urlpatterns = [
     # path('category/<str:cats>',views.CategoryView,name="category" ),
     path('category/<str:cats>',views.CategoryView.as_view(),name="category" ),
     path('search',views.search_post,name="search" ),
+    path('my_posts',views.MyPostView.as_view(),name="my_posts"),
+    
 
 ]

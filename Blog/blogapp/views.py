@@ -42,10 +42,7 @@ class HomeView(ListView):
         if keyword:
             posts = Post.objects.filter(body__contains=keyword)
             return posts
-
-        
         # myFilter = PostFilter(self.request.GET,self.get_queryset())
-
         return super().get_queryset()
     
     def get_context_data(self,*args, **kwargs):
@@ -165,11 +162,20 @@ def search_post(request):
 
 class MyPostView(ListView):
     model = Post
-    template_name = 'blogapp/home.html'
-    # ordering = ['-id']
+    template_name = 'blogapp/myposts.html'
     ordering = ['-publish_date']
+    
+    filterset_class = PostFilter
 
     def get_queryset(self):
         posts = Post.objects.filter(author=self.request.user)
         return posts
+    
+    def get_context_data(self,*args, **kwargs):
+        myFilter = PostFilter(self.request.GET,self.get_queryset())
+        context = super().get_context_data(*args,**kwargs)
+        context['categories']= Category.objects.all()
+        context['myFilter']= myFilter  
+        context['object_list']= myFilter.qs  
+        return context
         
