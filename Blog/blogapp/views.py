@@ -126,15 +126,19 @@ class CategoryView(ListView):
     template_name = 'blogapp/home.html'
     # ordering = ['-id']
     ordering = ['-publish_date']
-
+    filterset_class = PostFilter
     def get_queryset(self,*args, **kwargs):
-        cats = self.kwargs['cats'].replace('-',' ')
+        cats = self.kwargs['cats']
         category_posts = Post.objects.filter(category=cats).order_by("-publish_date")
         return category_posts
 
     def get_context_data(self,*args, **kwargs):
         context = super().get_context_data(*args,**kwargs)
         context['categories']= Category.objects.all()
+
+        myFilter = PostFilter(self.request.GET,self.get_queryset())
+        context['myFilter']= myFilter  
+        context['object_list']= myFilter.qs 
         return context
 
 # Add comment
