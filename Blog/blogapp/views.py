@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import fields
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
 from .models import Post,Category,Comment
@@ -7,10 +8,23 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404,HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
+from django_filters.rest_framework import DjangoFilterBackend
+import django_filters
 # Create your views here.
 def home(request):
     return render(request,"blogapp/home.html")
     # return HttpResponse("Hi")
+
+class PostFilter(django_filters.FilterSet):
+    # start_date = django_filters.DateFilter(field_name='publish_date',lookup_expr='gte')
+    # end_date = django_filters.DateFilter(field_name='publish_date',lookup_expr='lte')
+    # range = django_filters.DateFromToRangeFilter (field_name='publish_date',lookup_expr='lte')
+    body = django_filters.CharFilter(field_name='body',lookup_expr='icontains')
+    # category = django_filters.CharFilter(field_name='category',lookup_expr='icontains')
+    class Meta:
+        model = Post
+        fields="__all__"
+        exclude=['body','publish_date']
 
 
 class HomeView(ListView):
@@ -18,10 +32,38 @@ class HomeView(ListView):
     template_name = 'blogapp/home.html'
     # ordering = ['-id']
     ordering = ['-publish_date']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fileds=['category']
+    
+    filterset_class = PostFilter
+
+    def get_queryset(self):
+        keyword = self.request.GET.get('search','')
+        if keyword:
+            posts = Post.objects.filter(body__contains=keyword)
+            return posts
+
+        
+        # myFilter = PostFilter(self.request.GET,self.get_queryset())
+
+        return super().get_queryset()
+    
     def get_context_data(self,*args, **kwargs):
+        myFilter = PostFilter(self.request.GET,self.get_queryset())
         context = super().get_context_data(*args,**kwargs)
         context['categories']= Category.objects.all()
+        context['myFilter']= myFilter  
+        context['object_list']= myFilter.qs  
         return context
+
+
+
+
+# def post_filter(request):
+# 	posts= Post.object.all()
+# 	filter = PostFilter(request.GET, queryset = posts)
+# 	return render(request, 'blogapp/home.html', {'object_list' : filter})
+
 
 
 class ArticleView(DetailView):
@@ -110,3 +152,24 @@ class AddCommentView(LoginRequiredMixin,CreateView):
         form.instance.post_id = self.kwargs['pk']
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+# Search Post
+def search_post(request):
+    if request.method == 'POST':
+        keyword = request.POST['search']
+        posts = Post.objects.filter(body__contains=keyword)
+        return render(request,'blogapp/home.html',{'object_list':posts})
+    return render(request,'blogapp/home.html')
+
+
+class MyPostView(ListView):
+    model = Post
+    template_name = 'blogapp/home.html'
+    # ordering = ['-id']
+    ordering = ['-publish_date']
+
+    def get_queryset(self):
+        posts = Post.objects.filter(author=self.request.user)
+        return posts
+        

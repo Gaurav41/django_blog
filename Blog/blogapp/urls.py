@@ -10,5 +10,6 @@ urlpatterns = [
     path('article/delete/<int:pk>',views.DeletePostView.as_view(),name="delete_post" ),
     # path('category/<str:cats>',views.CategoryView,name="category" ),
     path('category/<str:cats>',views.CategoryView.as_view(),name="category" ),
+    path('search',views.search_post,name="search" ),
 
 ]

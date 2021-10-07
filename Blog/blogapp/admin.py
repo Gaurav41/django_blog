@@ -7,6 +7,10 @@ from .models import Post,Category,Comment
 class PostModelAdmin(admin.ModelAdmin):
     list_display=['id','title','author','publish_date','category']
 
-admin.site.register(Category)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display=['id','name']
+
+    
 admin.site.register(Comment)
     
