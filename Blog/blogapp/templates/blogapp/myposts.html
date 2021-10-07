@@ -14,14 +14,16 @@
     <div class="row text-center">
         <div class="col-md-8"><h4>Posts</h4></div>
         <div class="col-md-4"><h4>Action</h4></div>
+        <hr>
     </div>
     <ol>
         {% for post in object_list %}
+       
         <li>
-            <div class="row">
+            <div class="row mt-4 ">
                 <div class="col-md-8">
                     <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
-                        href="{% url 'category' post.category|slugify %}">{{post.category}}</a> -
+                        href="{% url 'category' post.category.id %}">{{post.category}}</a> -
                     {{post.author.first_name}} {{post.author.last_name}}<br>
                     <div class="text-justify">
                         {{post.body|safe|truncatewords:30}}...
@@ -32,6 +34,7 @@
                     <a href="{% url 'delete_post' post.pk %}">Delete</a>     
                 </div>
             </div>
+            <hr>
         </li>
         {% endfor %}
 

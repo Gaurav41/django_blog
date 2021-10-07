@@ -1,24 +1,33 @@
 {% extends 'blogapp/base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <div class="mt-5"> <h1 class="text-center">Post</h1> </div>
-    
-    <div class="mt-5">
-        <form action="">
-            {{myFilter.form}}
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
-    </div>
-   
-    <div class="mt-5">
-        <ul>
-            {% for post in object_list %}
-                <li> <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a href="{% url 'category' post.category.id %}">{{post.category}}</a> - {{post.author.first_name}} {{post.author.last_name}}<br>
-                {{post.body|safe|truncatewords:80}}...</li>
-            {% endfor %}
-        </ul>
-    </div>
-    
-{% endblock %}    
+<div class="mt-5">
+    <h1 class="text-center">Post</h1>
+</div>
 
+<div class="text-center mt-5 border border-primary p-4 ">
+    <form action="">
+        {{myFilter.form}}
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
 
+<div class="mt-5">
+    <ul>
+        {% for post in object_list %}
+        <li>
+            <div class="mt-4">
+                <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
+                    href="{% url 'category' post.category.id %}"> ({{post.category}}).</a>  Author-{{post.author.first_name}}
+                {{post.author.last_name}}<br>
+                <div class="border border-warning">
+                    {{post.body|safe|truncatewords:80}}...
+                </div>
+            </div>
+        </li>
+
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
