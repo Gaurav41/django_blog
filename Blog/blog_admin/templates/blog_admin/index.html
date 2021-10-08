@@ -1,0 +1,28 @@
+{% extends 'blogapp/base.html' %}
+{% block title %}Admin-home{% endblock %}
+{% block content %}
+
+<ul>
+    <li>
+        <h4>Users</h4>
+           <ol>
+               <li><a href="{% url 'add_user' %}">Add User</a></li>
+               <li><a href="{% url 'users' %}">List Users</a></li>
+           </ol> 
+    </li>
+    <li>
+        <h4>Posts</h4>
+           <ol>
+               <li><a href="{% url 'add_post' %}">Add Post</a></li>
+               <li><a href="{% url 'posts' %}">List Posts</a></li>
+               <li><a href="{% url 'comments' %}">Comments</a></li>
+           </ol> 
+    </li>
+
+    
+</ul>
+
+
+
+
+{% endblock %}

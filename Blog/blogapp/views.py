@@ -37,7 +37,7 @@ class HomeView(ListView):
     filterset_class = PostFilter
     def get_template_names(self):
         if self.request.user.is_superuser:
-            template_name = 'blogapp/admin_home.html'
+            template_name = 'blog_admin/index.html'
         else:
             template_name = 'blogapp/home.html'
 
