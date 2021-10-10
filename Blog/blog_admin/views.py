@@ -217,3 +217,9 @@ class DeleteCategoryView(DeleteView):
     template_name = 'blog_admin/delete_confirm.html'
     success_url = reverse_lazy('categories')
     
+
+class EditCategoryView(UpdateView):
+    model = Category
+    template_name = 'blog_admin/edit_category.html'
+    success_url = reverse_lazy('categories') 
+    fields = '__all__'
