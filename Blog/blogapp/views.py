@@ -10,6 +10,9 @@ from django.http import Http404,HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
+from .mixins import CheckReaderGroupMixin, CheckCommentorGroupMixin, CheckEditorGroupMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 def home(request):
     return render(request,"blogapp/home.html")
@@ -28,6 +31,8 @@ class PostFilter(django_filters.FilterSet):
 
 
 class HomeView(ListView):
+    # LOGIN_URL = reverse_lazy('login')
+
     model = Post
     template_name = 'blogapp/home.html'
     ordering = ['-publish_date']
@@ -36,11 +41,11 @@ class HomeView(ListView):
     
     filterset_class = PostFilter
     def get_template_names(self):
-        if self.request.user.is_superuser:
-            template_name = 'blog_admin/index.html'
-        else:
-            template_name = 'blogapp/home.html'
-
+        # if self.request.user.is_superuser:
+        #     template_name = 'blog_admin/index.html'
+        # else:
+        #     template_name = 'blogapp/home.html'
+        template_name = 'blogapp/home.html'
         return template_name
 
 
@@ -71,11 +76,11 @@ class HomeView(ListView):
 
 
 
-class ArticleView(DetailView):
+class ArticleView(LoginRequiredMixin,DetailView):
     model = Post
     template_name = 'blogapp/article.html'
 
-class AddPostView(LoginRequiredMixin,CreateView):
+class AddPostView(LoginRequiredMixin,CheckEditorGroupMixin,CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blogapp/add_post.html'
@@ -91,7 +96,7 @@ class AddPostView(LoginRequiredMixin,CreateView):
         return HttpResponseRedirect(instance.get_absolute_url())
 
     
-class EditPostView(LoginRequiredMixin,UpdateView):
+class EditPostView(LoginRequiredMixin,CheckEditorGroupMixin,UpdateView):
     model = Post
     template_name = 'blogapp/edit_post.html'
     # fields=['title','body']
@@ -111,12 +116,12 @@ class EditPostView(LoginRequiredMixin,UpdateView):
 
     
 
-class DeletePostView(LoginRequiredMixin,DeleteView):
+class DeletePostView(LoginRequiredMixin,CheckEditorGroupMixin,DeleteView):
     model = Post
     template_name = 'blogapp/delete_post.html'
     success_url=reverse_lazy('home')
 
-class AddCategoryView(LoginRequiredMixin,CreateView):
+class AddCategoryView(LoginRequiredMixin,CheckEditorGroupMixin,CreateView):
     model = Category
     # form_class = PostForm
     template_name = 'blogapp/add_category.html'
@@ -150,7 +155,7 @@ class CategoryView(ListView):
         return context
 
 # Add comment
-class AddCommentView(LoginRequiredMixin,CreateView):
+class AddCommentView(LoginRequiredMixin,CheckCommentorGroupMixin,CreateView):
     model = Comment
     form_class = CommentForm
     # fields = '__all__'
@@ -172,7 +177,7 @@ def search_post(request):
     return render(request,'blogapp/home.html')
 
 
-class MyPostView(ListView):
+class MyPostView(LoginRequiredMixin, CheckEditorGroupMixin ,ListView):
     model = Post
     template_name = 'blogapp/myposts.html'
     ordering = ['-publish_date']

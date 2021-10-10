@@ -3,6 +3,8 @@ from django.views import generic
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from django.urls import reverse_lazy
 from .forms import SignupForm,EditProfileForm
+from django.contrib.auth import logout
+
 # Create your views here.
 
 class UserRegistrationView(generic.CreateView):
@@ -20,3 +22,5 @@ class UserEditView(generic.UpdateView):
     def get_object(self):
         return self.request.user
 
+def logout_user(request):
+    logout(request)

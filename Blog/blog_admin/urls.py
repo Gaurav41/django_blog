@@ -1,8 +1,8 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 
 urlpatterns=[
-    path('',views.HomeView.as_view(),name='admin_home'),
+    path('admin_home/',views.HomeView.as_view(),name='admin_home'),
     path('add_user',views.AddUserView.as_view(),name='add_user'),
     path('edit_user/<int:pk>',views.EditUserView.as_view(),name='edit_user'),
     # path('delete_user/<int:pk>',views.DeleteUserView.as_view(),name='delete_user'),
