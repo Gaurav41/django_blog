@@ -8,7 +8,7 @@ from blogapp.views import PostFilter,HomeView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 import django_filters
-from .forms import EditProfileForm,UserFilterForm
+from .forms import EditProfileForm,UserFilterForm,SignupForm
 from django.http import HttpResponseForbidden
 from .permissions import IsStaffOrSuperUserMixin
 
@@ -31,7 +31,8 @@ class UserFilter(django_filters.FilterSet):
 class AddUserView(IsStaffOrSuperUserMixin,CreateView):
     # permission_classes=[IsSelfOrReadOnly]
     # authentication_classes=[SessionAuthentication]
-    form_class = UserCreationForm
+    # form_class = UserCreationForm
+    form_class = SignupForm
     template_name = "blog_admin/add_user.html"
     # success_url = "/edit_user/" 
     
