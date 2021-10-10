@@ -101,7 +101,7 @@ class DeleteUserView(IsStaffOrSuperUserMixin,DeleteView):
 #     except :
 #         return redirect(reverse('users'))
 
-class DeleteUserView(DeleteView):
+class DeleteUserView(IsStaffOrSuperUserMixin,DeleteView):
     model = User
     template_name = 'blog_admin/delete_confirm.html'
     success_url = reverse_lazy('users')
@@ -203,20 +203,20 @@ class AddCategoryView(IsStaffOrSuperUserMixin,CreateView):
     success_url = '/blog_admin/admin_home/'
 
 
-class CategoryView(ListView):
+class CategoryView(IsStaffOrSuperUserMixin,ListView):
     model = Category
     template_name = 'blog_admin/categories.html'
     context_object_name = 'categories'
                               
 # DeleteCategoryView
 
-class DeleteCategoryView(DeleteView):
+class DeleteCategoryView(IsStaffOrSuperUserMixin,DeleteView):
     model = Category
     template_name = 'blog_admin/delete_confirm.html'
     success_url = reverse_lazy('categories')
     
 
-class EditCategoryView(UpdateView):
+class EditCategoryView(IsStaffOrSuperUserMixin,UpdateView):
     model = Category
     template_name = 'blog_admin/edit_category.html'
     success_url = reverse_lazy('categories') 

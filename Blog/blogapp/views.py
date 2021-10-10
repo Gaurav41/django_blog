@@ -80,7 +80,7 @@ class ArticleView(LoginRequiredMixin,DetailView):
     model = Post
     template_name = 'blogapp/article.html'
 
-class AddPostView(LoginRequiredMixin,CheckEditorGroupMixin,CreateView):
+class AddPostView(CheckEditorGroupMixin,CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blogapp/add_post.html'
@@ -96,7 +96,7 @@ class AddPostView(LoginRequiredMixin,CheckEditorGroupMixin,CreateView):
         return HttpResponseRedirect(instance.get_absolute_url())
 
     
-class EditPostView(LoginRequiredMixin,CheckEditorGroupMixin,UpdateView):
+class EditPostView(CheckEditorGroupMixin,UpdateView):
     model = Post
     template_name = 'blogapp/edit_post.html'
     # fields=['title','body']
@@ -116,12 +116,12 @@ class EditPostView(LoginRequiredMixin,CheckEditorGroupMixin,UpdateView):
 
     
 
-class DeletePostView(LoginRequiredMixin,CheckEditorGroupMixin,DeleteView):
+class DeletePostView(CheckEditorGroupMixin,DeleteView):
     model = Post
     template_name = 'blogapp/delete_post.html'
     success_url=reverse_lazy('home')
 
-class AddCategoryView(LoginRequiredMixin,CheckEditorGroupMixin,CreateView):
+class AddCategoryView(CheckEditorGroupMixin,CreateView):
     model = Category
     # form_class = PostForm
     template_name = 'blogapp/add_category.html'
@@ -157,7 +157,7 @@ class CategoryView(ListView):
         return context
 
 # Add comment
-class AddCommentView(LoginRequiredMixin,CheckCommentorGroupMixin,CreateView):
+class AddCommentView(CheckCommentorGroupMixin,CreateView):
     model = Comment
     form_class = CommentForm
     # fields = '__all__'
@@ -179,7 +179,7 @@ def search_post(request):
     return render(request,'blogapp/home.html')
 
 
-class MyPostView(LoginRequiredMixin, CheckEditorGroupMixin ,ListView):
+class MyPostView( CheckEditorGroupMixin ,ListView):
     model = Post
     template_name = 'blogapp/myposts.html'
     ordering = ['-publish_date']
