@@ -1,0 +1,27 @@
+{% extends 'blog_admin/base.html' %}
+{% block title %}Categories{% endblock %}
+{% block content %} 
+    <h1>{{Categories}}</h1>
+    
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Sr.</th>
+                <th scope="col">Category</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{cat}}</td>
+                        <td> <a href="{% url 'delete_category' cat.id %}"> Delete</a>|<a href="{% url 'delete_category'  cat.id %}"> Edit</a> </td> 
+
+
+                    </tr>
+                    {% endfor %}  
+                </tbody>
+        </table>
+    
+{% endblock %}    

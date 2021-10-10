@@ -95,13 +95,18 @@ class DeleteUserView(IsStaffOrSuperUserMixin,DeleteView):
     success_url=reverse_lazy('users')
 
 
-def delete_user(request,pk):
-    try:
-        user = User.objects.get(pk=pk)
-        user.delete()
-        return redirect(reverse('users'))
-    except :
-        return redirect(reverse('users'))
+# def delete_user(request,pk):
+#     try:
+#         user = User.objects.get(pk=pk)
+#         user.delete()
+#         return redirect(reverse('users'))
+#     except :
+#         return redirect(reverse('users'))
+
+class DeleteUserView(DeleteView):
+    model = User
+    template_name = 'blog_admin/delete_confirm.html'
+    success_url = reverse_lazy('users')
 
 
 class UserList(IsStaffOrSuperUserMixin,ListView):
@@ -180,7 +185,7 @@ class CommentsListView(IsStaffOrSuperUserMixin,ListView):
 
 
 def delete_comment(request,pk):
-    
+
     # try:
     comment = Comment.objects.get(pk=pk)
     if (comment.user == request.user or request.user.is_superuser) :
@@ -191,3 +196,24 @@ def delete_comment(request,pk):
         
     # except :
     #     return redirect(reverse('comments'))
+
+class AddCategoryView(IsStaffOrSuperUserMixin,CreateView):
+    model = Category
+    # form_class = PostForm
+    template_name = 'blog_admin/add_category.html'
+    fields = '__all__'
+    success_url = '/blog_admin/admin_home/'
+
+
+class CategoryView(ListView):
+    model = Category
+    template_name = 'blog_admin/categories.html'
+    context_object_name = 'categories'
+                              
+# DeleteCategoryView
+
+class DeleteCategoryView(DeleteView):
+    model = Category
+    template_name = 'blog_admin/delete_confirm.html'
+    success_url = reverse_lazy('categories')
+    

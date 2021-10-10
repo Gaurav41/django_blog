@@ -4,7 +4,7 @@ from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Post,Category,Comment
 from .forms import PostForm,EditForm,CommentForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404,HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
@@ -126,6 +126,7 @@ class AddCategoryView(LoginRequiredMixin,CheckEditorGroupMixin,CreateView):
     # form_class = PostForm
     template_name = 'blogapp/add_category.html'
     fields = '__all__'
+    # success_url=reverse_lazy('home')
 
 
 # def CategoryView(request,cats):
@@ -140,6 +141,7 @@ class CategoryView(ListView):
     # ordering = ['-id']
     ordering = ['-publish_date']
     filterset_class = PostFilter
+    
     def get_queryset(self,*args, **kwargs):
         cats = self.kwargs['cats']
         category_posts = Post.objects.filter(category=cats).order_by("-publish_date")
