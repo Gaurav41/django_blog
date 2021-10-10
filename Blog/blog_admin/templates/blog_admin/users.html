@@ -1,15 +1,22 @@
 {% extends 'blog_admin/base.html' %}
 {% block title %}Admin-users{% endblock %}
 {% block content %}
-
-<div class="text-center mt-5 border border-primary p-4 ">
-  <form action="">
-      {{myFilter.form}}
-      <button class="btn btn-primary" type="submit">Search</button>
+<!-- text-center mt-5 border border-primary -->
+<!-- {{myFilter.form}} -->
+<div class="form-group text-center mt-5 border border-primary" >
+  <form action="" novalidate>
+      
+      {% for fm in myFilter.form %}
+            {{fm.label_tag}} {{fm}} 
+        {% endfor %}
+       <br>
+      <button class="btn btn-primary my-3 " type="submit">Search</button>
   </form>
+
+  
 </div>
 
-<table class="table table-bordered">
+<table class="table table-bordered mt-5">
   <thead>
     <tr>
       <th scope="col">Sr</th>
@@ -37,7 +44,8 @@
       <td> {{user.last_name}}</td>
       <td> {{user.email}}</td>
       <td> {{user.date_joined}}</td>
-      <td> {{user.groups}}</td>
+      
+      <td>{% for i in user.groups.all  %} {{ i }} {% empty %} None {% endfor %}</td>
       <td> {{user.is_active}}</td>
       <td> {{user.is_staff}}</td>
       <td> {{user.is_superuser}}</td>

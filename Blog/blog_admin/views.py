@@ -8,7 +8,7 @@ from blogapp.views import PostFilter,HomeView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 import django_filters
-from .forms import EditProfileForm
+from .forms import EditProfileForm,UserFilterForm
 from django.http import HttpResponseForbidden
 from .permissions import IsStaffOrSuperUserMixin
 
@@ -21,14 +21,11 @@ class HomeView(IsStaffOrSuperUserMixin,TemplateView):
 
 
 class UserFilter(django_filters.FilterSet):
-    # start_date = django_filters.DateFilter(field_name='publish_date',lookup_expr='gte')
-    # end_date = django_filters.DateFilter(field_name='publish_date',lookup_expr='lte')
-    # range = django_filters.DateFromToRangeFilter (field_name='publish_date',lookup_expr='lte')
-    # body = django_filters.CharFilter(field_name='body',lookup_expr='icontains')
-    # category = django_filters.CharFilter(field_name='category',lookup_expr='icontains')
+    
     class Meta:
+        form = UserFilterForm
         model = User
-        fields=['email','is_staff','is_active','is_superuser']
+        fields=['email','is_staff','groups','is_active','is_superuser']
     
 
 class AddUserView(IsStaffOrSuperUserMixin,CreateView):
