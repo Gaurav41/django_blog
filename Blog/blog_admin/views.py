@@ -11,6 +11,7 @@ import django_filters
 from .forms import EditProfileForm,UserFilterForm,SignupForm
 from django.http import HttpResponseForbidden
 from .permissions import IsStaffOrSuperUserMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 # Create your views here.
 
@@ -28,13 +29,15 @@ class UserFilter(django_filters.FilterSet):
         fields=['email','is_staff','groups','is_active','is_superuser']
     
 
-class AddUserView(IsStaffOrSuperUserMixin,CreateView):
+class AddUserView(SuccessMessageMixin,IsStaffOrSuperUserMixin,CreateView):
     # permission_classes=[IsSelfOrReadOnly]
     # authentication_classes=[SessionAuthentication]
     # form_class = UserCreationForm
     form_class = SignupForm
     template_name = "blog_admin/add_user.html"
     # success_url = "/edit_user/" 
+    success_message = "User added successfully"
+
     
     def get_absolute_url(self,**kwargs):
         print("*"*50)
@@ -60,12 +63,13 @@ class AddUserView(IsStaffOrSuperUserMixin,CreateView):
 
 
 
-class EditUserView(IsStaffOrSuperUserMixin,UpdateView):
+class EditUserView(SuccessMessageMixin,IsStaffOrSuperUserMixin,UpdateView):
     model = User
     # form_class = UserChangeForm  
     form_class = EditProfileForm  
     template_name = "blog_admin/edit_user.html"
     success_url = reverse_lazy('users') 
+    success_message = "User updated successfully"
 
     # def get_object(self,**kwargs):
     #     if kwargs:
@@ -87,10 +91,10 @@ class EditUserView(IsStaffOrSuperUserMixin,UpdateView):
     #     # remember the import: from django.http import HttpResponseRedirect
     #     return  HttpResponseRedirect(self.get_absolute_url(user=user))
 
-class DeleteUserView(IsStaffOrSuperUserMixin,DeleteView):
-    model = User
-    template_name = 'blog_admin/delete_User.html'
-    success_url=reverse_lazy('users')
+# class DeleteUserView(SuccessMessageMixin,IsStaffOrSuperUserMixin,DeleteView):
+#     model = User
+#     template_name = 'blog_admin/delete_User.html'
+#     success_url=reverse_lazy('users')
 
 
 # def delete_user(request,pk):
@@ -101,10 +105,11 @@ class DeleteUserView(IsStaffOrSuperUserMixin,DeleteView):
 #     except :
 #         return redirect(reverse('users'))
 
-class DeleteUserView(IsStaffOrSuperUserMixin,DeleteView):
+class DeleteUserView(SuccessMessageMixin,IsStaffOrSuperUserMixin,DeleteView):
     model = User
     template_name = 'blog_admin/delete_confirm.html'
     success_url = reverse_lazy('users')
+    success_message = "User deleted successfully"
 
 
 class UserList(IsStaffOrSuperUserMixin,ListView):
@@ -195,12 +200,13 @@ def delete_comment(request,pk):
     # except :
     #     return redirect(reverse('comments'))
 
-class AddCategoryView(IsStaffOrSuperUserMixin,CreateView):
+class AddCategoryView(SuccessMessageMixin,IsStaffOrSuperUserMixin,CreateView):
     model = Category
     # form_class = PostForm
     template_name = 'blog_admin/add_category.html'
     fields = '__all__'
     success_url = '/blog_admin/admin_home/'
+    success_message = "Category added successfully"
 
 
 class CategoryView(IsStaffOrSuperUserMixin,ListView):
@@ -210,14 +216,16 @@ class CategoryView(IsStaffOrSuperUserMixin,ListView):
                               
 # DeleteCategoryView
 
-class DeleteCategoryView(IsStaffOrSuperUserMixin,DeleteView):
+class DeleteCategoryView(SuccessMessageMixin,IsStaffOrSuperUserMixin,DeleteView):
     model = Category
     template_name = 'blog_admin/delete_confirm.html'
     success_url = reverse_lazy('categories')
+    success_message = "Category deleted successfully"
     
 
-class EditCategoryView(IsStaffOrSuperUserMixin,UpdateView):
+class EditCategoryView(SuccessMessageMixin,IsStaffOrSuperUserMixin,UpdateView):
     model = Category
     template_name = 'blog_admin/edit_category.html'
     success_url = reverse_lazy('categories') 
     fields = '__all__'
+    success_message = "Category updated successfully"

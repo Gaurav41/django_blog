@@ -18,7 +18,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 
 class CheckReaderGroupMixin(UserPassesTestMixin,LoginRequiredMixin):
     def test_func(self):
-        return self.request.user.groups.filter(name__in=["reader","commentor","editor"])
+        return self.request.user.groups.filter(name__in=["reader","commentor","editor"]) 
 
 
 # class CheckCommentorGroupMixin():
@@ -34,7 +34,7 @@ class CheckReaderGroupMixin(UserPassesTestMixin,LoginRequiredMixin):
 
 class CheckCommentorGroupMixin(UserPassesTestMixin,LoginRequiredMixin):
     def test_func(self):
-        return self.request.user.groups.filter(name__in=["commentor","editor"])
+        return self.request.user.groups.filter(name__in=["commentor","editor"]) or self.request.user.is_superuser
 
 
 # class CheckEditorGroupMixin():
@@ -49,4 +49,4 @@ class CheckCommentorGroupMixin(UserPassesTestMixin,LoginRequiredMixin):
 
 class CheckEditorGroupMixin(UserPassesTestMixin,LoginRequiredMixin):
     def test_func(self):
-        return self.request.user.groups.filter(name="editor")
+        return self.request.user.groups.filter(name="editor") or self.request.user.is_superuser

@@ -55,7 +55,7 @@
               <a class="nav-link" href="{% url 'add_post' %}">Add Post</a>
             </li>
             <li class="nav-item mx-1">
-              <a class="nav-link" href="{% url 'add_category' %}">Add Category</a>
+              <a class="nav-link" href="{% url 'addCategory' %}">Add Category</a>
             </li>
 
             <li class="nav-item mx-1">
@@ -72,6 +72,9 @@
             </li>
             {%else%}
             <li class="nav-item mx-1">
+              <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item mx-1">
               <a class="nav-link " href="{% url 'register' %}">Register</a>
             </li>
             <li class="nav-item mx-1">
@@ -87,7 +90,15 @@
         </div>
       </div>
     </nav>
-
+    <div>
+      {% if messages %}
+        {% for message in messages %}
+            <div class="text-center alert alert-{{ message.tags }}">
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+      {% endif %}
+    </div>
     {% block content %}
 
     {% endblock %}

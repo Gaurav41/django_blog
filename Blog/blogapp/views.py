@@ -10,8 +10,10 @@ from django.http import Http404,HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
-from .mixins import CheckReaderGroupMixin, CheckCommentorGroupMixin, CheckEditorGroupMixin
+from .mixins import CheckReaderGroupMixin,CheckEditorGroupMixin, CheckCommentorGroupMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+
 
 # Create your views here.
 def home(request):
@@ -80,10 +82,11 @@ class ArticleView(LoginRequiredMixin,DetailView):
     model = Post
     template_name = 'blogapp/article.html'
 
-class AddPostView(CheckEditorGroupMixin,CreateView):
+class AddPostView(SuccessMessageMixin,CheckEditorGroupMixin,CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blogapp/add_post.html'
+    success_message = "Post created successfully"
 
     # fields = '__all__'
     def form_valid(self, form):
@@ -96,11 +99,13 @@ class AddPostView(CheckEditorGroupMixin,CreateView):
         return HttpResponseRedirect(instance.get_absolute_url())
 
     
-class EditPostView(CheckEditorGroupMixin,UpdateView):
+class EditPostView(SuccessMessageMixin,CheckEditorGroupMixin,UpdateView):
     model = Post
     template_name = 'blogapp/edit_post.html'
     # fields=['title','body']
     form_class = EditForm
+    success_message = "Post updated successfully"
+
     
     # def dispatch(self, request, *args, **kwargs):
     #     if not request.user.has_perm('blog_permission.blog_edit'):
@@ -116,17 +121,19 @@ class EditPostView(CheckEditorGroupMixin,UpdateView):
 
     
 
-class DeletePostView(CheckEditorGroupMixin,DeleteView):
+class DeletePostView(SuccessMessageMixin,CheckEditorGroupMixin,DeleteView):
     model = Post
-    template_name = 'blogapp/delete_post.html'
+    template_name = 'blogapp/delete_confirm.html'
     success_url=reverse_lazy('home')
+    success_message = "Post deleted successfully"
 
-class AddCategoryView(CheckEditorGroupMixin,CreateView):
+class AddCategoryView(SuccessMessageMixin,CheckEditorGroupMixin,CreateView):
     model = Category
     # form_class = PostForm
     template_name = 'blogapp/add_category.html'
     fields = '__all__'
     # success_url=reverse_lazy('home')
+    success_message = "Category added successfully"
 
 
 # def CategoryView(request,cats):
@@ -157,12 +164,13 @@ class CategoryView(ListView):
         return context
 
 # Add comment
-class AddCommentView(CheckCommentorGroupMixin,CreateView):
+class AddCommentView(SuccessMessageMixin,CheckCommentorGroupMixin,CreateView):
     model = Comment
     form_class = CommentForm
     # fields = '__all__'
     template_name = 'blogapp/add_comment.html'
     ordering = ['-date_added']
+    success_message = "Comment added successfully"
 
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
