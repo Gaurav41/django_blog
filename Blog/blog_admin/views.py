@@ -12,6 +12,7 @@ from .forms import EditProfileForm,UserFilterForm,SignupForm
 from django.http import HttpResponseForbidden
 from .permissions import IsStaffOrSuperUserMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404
 
 # Create your views here.
 
@@ -137,14 +138,24 @@ class PostListView(IsStaffOrSuperUserMixin,ListView):
     ordering = ['-publish_date']
     context_object_name = 'posts'    
     filterset_class = PostFilter
+    paginate_by= 5 # 5 items per page
+    paginate_orphans = 1 
     
     def get_context_data(self,*args, **kwargs):
         myFilter = PostFilter(self.request.GET,self.get_queryset())
         context = super().get_context_data(*args,**kwargs)
         context['categories']= Category.objects.all()
         context['myFilter']= myFilter  
-        context['posts']= myFilter.qs  
+        context['filterd_posts']= myFilter.qs
         return context
+    
+    def paginate_queryset(self, queryset, page_size):
+        try:
+            print(super().paginate_queryset(queryset, page_size))
+            return super().paginate_queryset(queryset, page_size)
+        except Http404:
+            self.kwargs['page']=1
+            return super().paginate_queryset(queryset, page_size)
 
 class CommentFilter(django_filters.FilterSet):
     # start_date = django_filters.DateFilter(field_name='publish_date',lookup_expr='gte')

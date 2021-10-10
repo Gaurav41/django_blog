@@ -13,21 +13,49 @@
 </div>
 
 <div class="mt-5">
-    <ul>
-        {% for post in object_list %}
-        <li>
-            <div class="mt-4">
-                <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
-                    href="{% url 'category' post.category.id %}"> ({{post.category}}).</a>  Author-{{post.author.first_name}}
-                {{post.author.last_name}}<br>
-                <div class="border border-warning">
-                    {{post.body|safe|truncatewords:80}}...
+    {% if is_paginated %}
+        {% for post in page_obj %}
+        <ul>
+            <li>
+                <div class="mt-4">
+                    <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
+                        href="{% url 'category' post.category.id %}"> ({{post.category}}).</a>
+                    Author-{{post.author.first_name}}
+                    {{post.author.last_name}}<br>
+                    <div class="border border-warning">
+                        {{post.body|safe|truncatewords:80}}...
+                    </div>
                 </div>
-            </div>
-        </li>
-
+            </li>
+        </ul>
         {% endfor %}
-    </ul>
+        <div>
+            {% if page_obj.has_previous %}
+            <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+            {% endif %}
+            <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}} </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{page_obj.next_page_number}}">Next</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <ul>
+            {% for post in object_list %}
+                <li>
+                    <div class="mt-4">
+                        <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
+                            href="{% url 'category' post.category.id %}"> ({{post.category}}).</a>
+                        Author-{{post.author.first_name}}
+                        {{post.author.last_name}}<br>
+                        <div class="border border-warning">
+                            {{post.body|safe|truncatewords:80}}...
+                        </div>
+                        <hr>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </div>
 
 {% endblock %}

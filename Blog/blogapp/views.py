@@ -38,6 +38,8 @@ class HomeView(ListView):
     model = Post
     template_name = 'blogapp/home.html'
     ordering = ['-publish_date']
+    paginate_by= 5 # 5 items per page
+    paginate_orphans = 1 
     # filter_backends = [DjangoFilterBackend]
     # filterset_fileds=['category']
     
@@ -67,6 +69,13 @@ class HomeView(ListView):
         context['myFilter']= myFilter  
         context['object_list']= myFilter.qs  
         return context
+
+    def paginate_queryset(self, queryset, page_size):
+        try:
+            return super().paginate_queryset(queryset, page_size)
+        except Http404:
+            self.kwargs['page']=1
+            return super().paginate_queryset(queryset, page_size)
 
 
 
