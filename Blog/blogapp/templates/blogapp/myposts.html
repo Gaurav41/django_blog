@@ -1,17 +1,18 @@
 {% extends 'blogapp/base.html' %}
 {% block title %}My Posts{% endblock %}
 {% block content %}
-<h1 class="text-center mt-5">Post</h1>
-
+<h1 class="text-center mt-3">My Post</h1>
+{% if object_list %}
 <div class="text-center mt-5 border border-primary p-4 ">
     <form action="">
         {{myFilter.form}}
         <button class="btn btn-primary" type="submit">Search</button>
     </form>
 </div>
-
+{% endif %}
 <div class="container mt-5">
     <div class="row text-center">
+        {% if object_list %}
         <div class="col-md-8"><h4>Posts</h4></div>
         <div class="col-md-4"><h4>Action</h4></div>
         <hr>
@@ -39,6 +40,9 @@
         {% endfor %}
 
     </ol>
+    {% else%}
+    <h2>You don't have any post ...  <a href="{% url 'add_post' %}">add one</a></h2>
+    {% endif%}
 </div>
 <div class="mt-5">
 

@@ -1,29 +1,57 @@
 {% extends 'blog_admin/base.html' %}
 {% block title %}Admin-users{% endblock %}
 {% block content %}
-<div class="text-center mt-5 border border-primary p-4 ">
+<h1 class="text-center mt-3"> Posts</h1>
+<div class="text-center mt-3 border border-primary p-4 ">
   <form action="">
     {{myFilter.form}}
     <button class="btn btn-primary" type="submit">Search</button>
   </form>
 </div>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">Sr</th>
-      <th scope="col">Title</th>
-      <th scope="col">Author</th>
-      <th scope="col">Publish date</th>
-      <th scope="col">category</th>
-    </tr>
-  </thead>
-  <tbody>
-    
 
-    {% if is_paginated %}
-      {% for post in page_obj %}
+<div class="bg-light mt-5">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Sr</th>
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Publish date</th>
+        <th scope="col">category</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% if is_paginated %}
+        {% for post in page_obj %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{post.id}}</td>
+            <td><a href="{% url 'article' post.id %}">{{post.title}}</a></td>
+            <td>{{post.author}}</td>
+            <td> {{post.publish_date}}</td>
+            <td> {{post.category}}</td>
+            <td><a href="{% url 'edit_post' post.id %}">Edit</a> | <a href="{% url 'delete_post' post.id %}">Delete</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+        <div>
+          {% if page_obj.has_previous %}
+          <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+          {% endif %}
+          <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}} </span>
+          {% if page_obj.has_next %}
+          <a href="?page={{page_obj.next_page_number}}">Next</a>
+          {% endif %}
+        </div>
+      {%else%}
+      {% for post in posts %}
       <tr>
         <td>{{forloop.counter}}</td>
+        <td>{{post.id}}</td>
         <td><a href="{% url 'article' post.id %}">{{post.title}}</a></td>
         <td>{{post.author}}</td>
         <td> {{post.publish_date}}</td>
@@ -31,30 +59,9 @@
         <td><a href="{% url 'edit_post' post.id %}">Edit</a> | <a href="{% url 'delete_post' post.id %}">Delete</a></td>
       </tr>
       {% endfor %}
-    
-  <div>
-    {% if page_obj.has_previous %}
-    <a href="?page={{page_obj.previous_page_number}}">Previous</a>
-    {% endif %}
-    <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}} </span>
-    {% if page_obj.has_next %}
-    <a href="?page={{page_obj.next_page_number}}">Next</a>
-    {% endif %}
-  </div>
+      </tbody>
+      </table>
+      {%endif%}
 
-{%else%}
-  {% for post in posts %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td><a href="{% url 'article' post.id %}">{{post.title}}</a></td>
-      <td>{{post.author}}</td>
-      <td> {{post.publish_date}}</td>
-      <td> {{post.category}}</td>
-      <td><a href="{% url 'edit_post' post.id %}">Edit</a> | <a href="{% url 'delete_post' post.id %}">Delete</a></td>
-    </tr>
-  {% endfor %}
-{%endif%}
-</tbody>
-</table>
-
+</div>
 {% endblock %}

@@ -1,13 +1,15 @@
 {% extends 'blog_admin/base.html' %}
 {% block title %}Admin-users{% endblock %}
 {% block content %}
-<div class="text-center mt-5 border border-primary p-4 ">
+<h1 class="text-center mt-3"> Comments</h1>
+<div class="text-center mt-3 border border-primary p-4 ">
   <form action="">
       {{myFilter.form}}
       <button class="btn btn-primary" type="submit">Search</button>
   </form>
 </div>
-<table class="table table-bordered">
+
+<table class="table table-bordered bg-light mt-5">
   <thead>
     <tr>
       <th scope="col">Sr</th>
@@ -15,6 +17,7 @@
       <th scope="col">comment</th>
       <th scope="col">on Post</th>
       <th scope="col">date</th>
+      <th scope="col">Action</th>
 
     </tr>
   </thead>

@@ -1,8 +1,8 @@
 {% extends 'blogapp/base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="mt-5">
-    <h1 class="text-center">Post</h1>
+<div class="mt-2">
+    <h1 class="text-center">Blogs</h1>
 </div>
 
 <div class="text-center mt-5 border border-primary p-4 ">
@@ -17,14 +17,15 @@
         {% for post in page_obj %}
         <ul>
             <li>
-                <div class="mt-4">
-                    <a href="{% url 'article' post.id %}">{{post.title}}</a> - <a
+                <div class="mt-5">
+                   <h1> <a href="{% url 'article' post.id %}" >{{post.title}}</a> </h1>- <a
                         href="{% url 'category' post.category.id %}"> ({{post.category}}).</a>
                     Author-{{post.author.first_name}}
                     {{post.author.last_name}}<br>
-                    <div class="border border-warning">
+                    <div class="border">
                         {{post.body|safe|truncatewords:80}}...
                     </div>
+                    <hr>
                 </div>
             </li>
         </ul>

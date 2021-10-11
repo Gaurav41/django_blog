@@ -1,8 +1,9 @@
 {% extends 'blogapp/base.html' %}
 {% block title %}Add Post{% endblock %}
 {% block content %}
-    <h1>Add Blog Post</h1>
-    <div class="form-group">
+<div>
+    <h1 class="text-center mt-3" >Add Blog Post</h1>
+    <div class="form-group bg-light mt-5">
         <form action="" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
@@ -10,7 +11,7 @@
             <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
         </form>
     </div>
-    
+</div>
 
        
  

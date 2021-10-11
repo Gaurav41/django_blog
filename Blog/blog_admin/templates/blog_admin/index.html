@@ -1,36 +1,33 @@
 {% extends 'blog_admin/base.html' %}
 {% block title %}Admin-home{% endblock %}
 {% block content %}
-
-<ul>
-    <li>
+<h1 class="text-center mt-3" >Admin Dashboard</h1>
+<hr>
+<div class="container mt-5 bg-light">
+    <div class="row">
+      <div class="col-sm">
         <h4>Users</h4>
            <ol>
                <li><a href="{% url 'add_user' %}">Add User</a></li>
                <li><a href="{% url 'users' %}">List Users</a></li>
            </ol> 
-    </li>
-    <li>
+      </div>
+      <div class="col-sm">
         <h4>Posts</h4>
            <ol>
                <li><a href="{% url 'add_post' %}">Add Post</a></li>
                <li><a href="{% url 'posts' %}">List Posts</a></li>
                <li><a href="{% url 'comments' %}">Comments</a></li>
            </ol> 
-    </li>
-
-    <li>
+      </div>
+      <div class="col-sm">
         <h4>Categories</h4>
            <ol>
                <li><a href="{% url 'add_category' %}">Add Category</a></li>
                <li><a href="{% url 'categories' %}">List Category</a></li>
            </ol> 
-    </li>
-
-    
-</ul>
-
-
-
+      </div>
+    </div>
+  </div>
 
 {% endblock %}
