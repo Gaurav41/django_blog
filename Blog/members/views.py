@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.views import generic
-from django.contrib.auth.forms import UserCreationForm,UserChangeForm
-from django.urls import reverse_lazy
+from django.http.response import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm,PasswordChangeForm
+from django.contrib.auth import authenticate, login,logout,update_session_auth_hash
+from django.urls import reverse_lazy,reverse
 from .forms import SignupForm,EditProfileForm
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -24,3 +28,17 @@ class UserEditView(generic.UpdateView):
 
 def logout_user(request):
     logout(request)
+
+@login_required()
+def user_change_password(request):
+    if request.method == "POST":
+        fm = PasswordChangeForm(user=request.user,data=request.POST)
+        if fm.is_valid():
+            fm.save()
+            # to keep user logged in
+            # update_session_auth_hash(request,fm.user)
+            return HttpResponseRedirect(reverse('home'))    
+    else:
+        fm = PasswordChangeForm(request.user)
+        # fm = SetPasswordForm(request.user)
+    return render(request,"registration/change_password.html",{'form':fm})
